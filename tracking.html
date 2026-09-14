@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Order — LET'S TALK</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">LET'S <span>TALK</span></a>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap track-box">
+    <h2>Track your order</h2>
+    <p style="color:#5a5a5a; font-size:0.9rem;">Enter the Order ID you received in WhatsApp.</p>
+    <div class="field" style="margin-top:24px;">
+      <label for="track-input">Order ID</label>
+      <input type="text" id="track-input" placeholder="LT-4821">
+    </div>
+    <button class="btn" id="track-btn">Check status</button>
+
+    <div id="track-result" style="margin-top:20px; display:none;">
+      <p><strong id="track-item"></strong></p>
+      <ul class="step-list">
+        <li class="done"><span class="dot"></span> Order placed</li>
+        <li class="active"><span class="dot"></span> Crafting &amp; embroidery</li>
+        <li><span class="dot"></span> Out for delivery</li>
+      </ul>
+    </div>
+
+    <div id="track-notfound" style="display:none; margin-top:20px; font-size:0.85rem; color:#5a5a5a;">
+      Lost your tracking history, or ordering from a new device? <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20check%20the%20status%20of%20my%20order." target="_blank" style="text-decoration:underline;">Tap here to ask on WhatsApp</a>.
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">© 2026 LET'S TALK.</div></footer>
+
+<script>
+document.getElementById("track-btn").addEventListener("click", () => {
+  const id = document.getElementById("track-input").value.trim().toUpperCase();
+  const orders = JSON.parse(localStorage.getItem("lt_orders") || "[]");
+  const match = orders.find((o) => o.id.toUpperCase() === id);
+  const result = document.getElementById("track-result");
+  const notFound = document.getElementById("track-notfound");
+
+  if (match) {
+    document.getElementById("track-item").textContent = `${match.item} — #${match.id}`;
+    result.style.display = "block";
+    notFound.style.display = "none";
+  } else {
+    result.style.display = "none";
+    notFound.style.display = "block";
+  }
+});
+</script>
+</body>
+</html>

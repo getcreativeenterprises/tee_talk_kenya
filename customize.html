@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Your Own — LET'S TALK</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/customizer.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">LET'S <span>TALK</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html#shop">Shop</a></li>
+        <li><a href="customize.html">Customizer</a></li>
+        <li><a href="index.html#scans">Scan Pages</a></li>
+        <li><a href="tracking.html">Track Order</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Design your own</h2>
+        <p>Pick a garment, a color, your words. Watch it update live.</p>
+      </div>
+    </div>
+
+    <div class="customizer-grid">
+      <div class="cz-panel">
+
+        <div class="cz-group">
+          <label class="group-label">Garment</label>
+          <div class="cz-tabs">
+            <button class="cz-tab active" data-garment="tee">T-Shirt</button>
+            <button class="cz-tab" data-garment="cap">Cap</button>
+          </div>
+        </div>
+
+        <div class="cz-group">
+          <label class="group-label">Base color</label>
+          <div class="swatches">
+            <button class="swatch active" style="background:#F3EFE6" data-color="#F3EFE6" title="Cream White"></button>
+            <button class="swatch" style="background:#5C5C5C" data-color="#5C5C5C" title="Asphalt Grey"></button>
+            <button class="swatch" style="background:#A3B19B" data-color="#A3B19B" title="Sage Green"></button>
+            <button class="swatch" style="background:#1A1A1A" data-color="#1A1A1A" title="Vintage Black"></button>
+          </div>
+        </div>
+
+        <div class="cz-group">
+          <label class="group-label" for="cz-text">Front text (max 35 characters)</label>
+          <input type="text" id="cz-text" class="cz-input" maxlength="35" value="TELL ME 2 TRUTHS AND A LIE.">
+          <div class="char-count"><span id="cz-count">27</span>/35</div>
+        </div>
+
+        <div class="cz-group">
+          <label class="group-label">Text color</label>
+          <div class="swatches">
+            <button class="swatch active" style="background:#1A1A1A" data-textcolor="#1A1A1A" title="Charcoal"></button>
+            <button class="swatch" style="background:#FBF8F3" data-textcolor="#FBF8F3" title="Cream"></button>
+            <button class="swatch" style="background:#B4483A" data-textcolor="#B4483A" title="Muted Red"></button>
+            <button class="swatch" style="background:#3E5C3A" data-textcolor="#3E5C3A" title="Forest Green"></button>
+          </div>
+        </div>
+
+        <div class="cz-group">
+          <label class="group-label">Typography</label>
+          <div class="font-options">
+            <button class="font-option active" data-font="mono">Typewriter</button>
+            <button class="font-option" data-font="script">Calligraphic</button>
+            <button class="font-option" data-font="grotesk">Clean Grotesk</button>
+          </div>
+        </div>
+
+        <div class="cz-group">
+          <div class="toggle-row">
+            <label class="group-label" style="margin:0;">Add QR code on back</label>
+            <button class="toggle" id="qr-toggle"></button>
+          </div>
+          <select class="cz-input" id="qr-dest" style="margin-top:10px; display:none;">
+            <option>Dogs vs Cats Community Poll</option>
+            <option>Two Truths and a Lie</option>
+            <option>My personal link (add at checkout)</option>
+          </select>
+        </div>
+
+        <button class="btn full" id="cz-order">Order this design via WhatsApp</button>
+      </div>
+
+      <div class="cz-preview">
+        <svg id="cz-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+          <path id="cz-garment" d="M60 10 L20 40 L35 70 L55 58 L55 220 L145 220 L145 58 L165 70 L180 40 L140 10 L120 22 C110 30 90 30 80 22 Z"
+            fill="#F3EFE6" stroke="#1A1A1A" stroke-width="3"/>
+          <text id="cz-line1" x="100" y="140" text-anchor="middle" font-size="11" fill="#1A1A1A" font-family="'Space Mono', monospace"></text>
+          <text id="cz-line2" x="100" y="155" text-anchor="middle" font-size="11" fill="#1A1A1A" font-family="'Space Mono', monospace"></text>
+          <text id="cz-line3" x="100" y="170" text-anchor="middle" font-size="11" fill="#1A1A1A" font-family="'Space Mono', monospace"></text>
+        </svg>
+        <div class="qr-tag" id="cz-qr-tag" style="display:none;">▦ scan me</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">© 2026 LET'S TALK.</div></footer>
+
+<div class="modal-overlay" id="order-overlay">
+  <div class="modal">
+    <button class="close-modal" data-close-modal>×</button>
+    <h3>Order via WhatsApp</h3>
+    <p class="modal-sub">We'll pre-fill your custom design and open WhatsApp so you can send it directly to us.</p>
+    <form id="order-form">
+      <input type="hidden" id="order-item">
+      <div class="field">
+        <label for="order-name">Your name</label>
+        <input type="text" id="order-name" required>
+      </div>
+      <div class="field">
+        <label for="order-address">Delivery address / city</label>
+        <input type="text" id="order-address" required>
+      </div>
+      <div class="field">
+        <label for="order-phone">Phone number</label>
+        <input type="tel" id="order-phone" required>
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn full">Confirm &amp; Send to WhatsApp</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/customizer.js"></script>
+<script src="js/whatsapp.js"></script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LET'S TALK — Wearable Icebreakers</title>
+<meta name="description" content="T-shirts and caps with scannable QR prompts, built to start real conversations with strangers.">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="#" class="logo">LET'S <span>TALK</span></a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#shop">Shop</a></li>
+        <li><a href="customize.html">Customizer</a></li>
+        <li><a href="#scans">Scan Pages</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="tracking.html">Track Order</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Wear something that gives people a reason to talk to you.</h1>
+      <p class="sub">Every shirt carries a scannable prompt on the back — a debate, a dare, a two-truths-and-a-lie. Someone scans it, and the conversation starts itself.</p>
+      <div class="hero-ctas">
+        <a href="#shop" class="btn">Explore Collection</a>
+        <a href="customize.html" class="btn ghost">Design Your Own</a>
+      </div>
+    </div>
+    <div class="hero-tee">
+      <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 10 L20 40 L35 70 L55 58 L55 220 L145 220 L145 58 L165 70 L180 40 L140 10 L120 22 C110 30 90 30 80 22 Z" fill="#F3EFE6" stroke="#1A1A1A" stroke-width="3"/>
+        <text x="100" y="140" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#1A1A1A">TWO TRUTHS</text>
+        <text x="100" y="155" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#1A1A1A">AND A LIE.</text>
+        <text x="100" y="170" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#1A1A1A">GUESS WHICH.</text>
+      </svg>
+      <div class="qr-tag">▦ scan me</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="shop">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>The Collection</h2>
+        <p>Five prompts. Five conversations waiting to happen.</p>
+      </div>
+    </div>
+    <div class="catalog-grid" id="catalog"></div>
+  </div>
+</section>
+
+<section class="section alt" id="scans">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Scan Destinations</h2>
+        <p>Every QR code on a garment leads to a live page like these — no app, no login, just scan and respond.</p>
+      </div>
+    </div>
+    <div class="qr-strip">
+      <div class="qr-card">
+        <h3>The Bracket — Dogs vs Cats</h3>
+        <p>A running poll. Scan, pick a side, see the live split, then argue about it with the wearer.</p>
+        <a href="dogs-vs-cats.html">Open scan page →</a>
+      </div>
+      <div class="qr-card">
+        <h3>Two Truths and a Lie</h3>
+        <p>Three statements from the wearer. Strangers scan and guess which one isn't true.</p>
+        <a href="two-truths.html">Open scan page →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="events">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Community Board</h2>
+        <p>Screen-free meetups for people who'd rather talk to a stranger than a feed.</p>
+      </div>
+    </div>
+    <div class="qr-strip">
+      <div class="qr-card">
+        <h3>Nairobi Icebreaker Mixer</h3>
+        <p>Sat, 27 Sep · Karura Forest Gate C · Wear a Let's Talk piece, get first round on us.</p>
+      </div>
+      <div class="qr-card">
+        <h3>The Bracket, Live</h3>
+        <p>Fri, 3 Oct · Alliance Française Courtyard · Dogs vs Cats settled in person.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 LET'S TALK. Wearables that talk first.</div>
+</footer>
+
+<!-- Order Modal -->
+<div class="modal-overlay" id="order-overlay">
+  <div class="modal">
+    <button class="close-modal" data-close-modal>×</button>
+    <h3>Order via WhatsApp</h3>
+    <p class="modal-sub">We'll pre-fill your order and open WhatsApp so you can send it directly to us.</p>
+    <form id="order-form">
+      <input type="hidden" id="order-item">
+      <div class="field">
+        <label for="order-name">Your name</label>
+        <input type="text" id="order-name" required>
+      </div>
+      <div class="field">
+        <label for="order-address">Delivery address / city</label>
+        <input type="text" id="order-address" required>
+      </div>
+      <div class="field">
+        <label for="order-phone">Phone number</label>
+        <input type="tel" id="order-phone" required>
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn full">Confirm &amp; Send to WhatsApp</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const products = [
+  { name: "The Warning", prompt: "\u201cAsk me what I did last Tuesday.\u201d", price: "KSh 1,800" },
+  { name: "The Conspiracy", prompt: "\u201cI have a theory. You won't like it.\u201d", price: "KSh 1,800" },
+  { name: "The Bracket", prompt: "Dogs vs Cats. Scan and pick a side.", price: "KSh 1,900" },
+  { name: "The Icebreaker", prompt: "Two truths, one lie. Guess right.", price: "KSh 1,900" },
+  { name: "The Timer", prompt: "\u201cYou have 5 minutes to change my mind.\u201d", price: "KSh 2,000" },
+];
+
+const grid = document.getElementById("catalog");
+grid.innerHTML = products.map((p) => `
+  <div class="card">
+    <div class="card-art">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="15" width="80" height="70" rx="4" fill="#FBF8F3" stroke="#1A1A1A" stroke-width="2"/>
+        <rect x="70" y="55" width="16" height="16" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <h3>${p.name}</h3>
+      <p class="prompt">${p.prompt}</p>
+      <p class="price">${p.price}</p>
+      <button class="btn small full" data-order-item="${p.name}" data-order-price="${p.price}">Order via WhatsApp</button>
+    </div>
+  </div>
+`).join("");
+</script>
+<script src="js/whatsapp.js"></script>
+</body>
+</html>

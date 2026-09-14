@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Truths and a Lie — LET'S TALK</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">LET'S <span>TALK</span></a>
+  </div>
+</header>
+
+<section class="poll-wrap">
+  <div class="wrap">
+    <h1>Two truths and a lie.<br>Guess which is the lie.</h1>
+    <div class="poll-options" id="poll-options" style="flex-direction:column; align-items:center; gap:14px;">
+      <button class="poll-btn" style="min-width:320px; text-align:left; font-size:1rem;" data-choice="1">1. I've met a former president.</button>
+      <button class="poll-btn" style="min-width:320px; text-align:left; font-size:1rem;" data-choice="2">2. I once ran a marathon in flip-flops.</button>
+      <button class="poll-btn" style="min-width:320px; text-align:left; font-size:1rem;" data-choice="3">3. I'm afraid of butterflies.</button>
+    </div>
+    <div class="poll-result" id="poll-result">
+      <p style="font-size:1.1rem;">You guessed <strong id="guess-num"></strong>. The page won't tell you if you're right.</p>
+      <p class="poll-message">Say this: "Okay — was it <span id="guess-num2"></span>?"</p>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">← <a href="index.html">Back to Let's Talk</a></div></footer>
+
+<script>
+// NOTE: this is a static example page. In Phase 2, the wearer sets their own
+// three statements from their account dashboard, and this page loads them
+// dynamically by the garment's QR code ID — that needs a backend (Supabase).
+document.querySelectorAll(".poll-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.getElementById("guess-num").textContent = "Statement #" + btn.dataset.choice;
+    document.getElementById("guess-num2").textContent = "#" + btn.dataset.choice;
+    document.getElementById("poll-result").classList.add("show");
+    document.getElementById("poll-options").style.display = "none";
+  });
+});
+</script>
+</body>
+</html>

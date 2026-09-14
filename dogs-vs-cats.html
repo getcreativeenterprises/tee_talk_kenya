@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dogs vs Cats — LET'S TALK</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">LET'S <span>TALK</span></a>
+  </div>
+</header>
+
+<section class="poll-wrap">
+  <div class="wrap">
+    <h1>The ultimate debate:<br>dogs or cats?</h1>
+    <div class="poll-options" id="poll-options">
+      <button class="poll-btn" data-choice="dogs">🐕 Dogs</button>
+      <button class="poll-btn" data-choice="cats">🐈 Cats</button>
+    </div>
+    <div class="poll-result" id="poll-result">
+      <div class="bar-row">
+        <div class="label">Dogs</div>
+        <div class="bar-track"><div class="bar-fill" id="bar-dogs"></div></div>
+        <div id="pct-dogs"></div>
+      </div>
+      <div class="bar-row">
+        <div class="label">Cats</div>
+        <div class="bar-track"><div class="bar-fill" id="bar-cats"></div></div>
+        <div id="pct-cats"></div>
+      </div>
+      <p class="poll-message">Say this: "Okay, be honest — dogs or cats, and why?"</p>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">← <a href="index.html">Back to Let's Talk</a></div></footer>
+
+<script>
+document.querySelectorAll(".poll-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    // Simulated live split — a real per-wearer live tally is a Phase 2 feature (needs a shared backend).
+    const dogs = btn.dataset.choice === "dogs" ? 55 : 51;
+    const cats = 100 - dogs;
+    document.getElementById("bar-dogs").style.width = dogs + "%";
+    document.getElementById("bar-cats").style.width = cats + "%";
+    document.getElementById("pct-dogs").textContent = dogs + "%";
+    document.getElementById("pct-cats").textContent = cats + "%";
+    document.getElementById("poll-result").classList.add("show");
+    document.getElementById("poll-options").style.display = "none";
+  });
+});
+</script>
+</body>
+</html>
