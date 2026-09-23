@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tell Me About Your First Date — LET'S TALK</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  .fd-wrap { max-width: 620px; margin: 0 auto; padding: 80px 24px 100px; }
+  .fd-wrap h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); text-align: center; }
+  .fd-sub { text-align: center; color: #5a5a5a; font-size: 0.9rem; margin: 14px auto 0; max-width: 42ch; }
+  .fd-wall { margin-top: 44px; display: flex; flex-direction: column; gap: 14px; }
+  .fd-story {
+    background: var(--oatmeal); border: 1px solid var(--tan); border-radius: 6px;
+    padding: 16px 18px; font-size: 0.92rem;
+  }
+  .fd-story .tag { display: block; font-size: 0.68rem; color: #888; margin-top: 8px; }
+  .fd-hook { text-align: center; margin-top: 30px; font-size: 0.8rem; color: #888; }
+  .fd-divider { border: none; border-top: 1px dashed var(--tan); margin: 48px 0 40px; }
+  .fd-ask {
+    text-align: center; border: 1px solid var(--ink); border-radius: 8px; padding: 30px 24px;
+    background: var(--cream);
+  }
+  .fd-ask p.rule { font-size: 0.85rem; color: #5a5a5a; margin: 0 0 16px; }
+  .fd-ask p.script { font-family: 'Caveat', cursive; font-size: 1.7rem; color: var(--red); margin: 0; }
+  .fd-add { margin-top: 40px; }
+  .fd-add label { display: block; font-size: 0.78rem; color: #444; margin-bottom: 8px; }
+  .fd-add-row { display: flex; gap: 10px; }
+  .fd-add-row input {
+    flex: 1; padding: 10px 12px; border: 1px solid var(--tan); border-radius: 4px;
+    font-family: 'Space Mono', monospace; font-size: 0.85rem; background: var(--oatmeal);
+  }
+  .fd-thanks { display: none; font-size: 0.8rem; color: var(--sage); margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">LET'S <span>TALK</span></a>
+  </div>
+</header>
+
+<section class="fd-wrap">
+  <h1>Tell me about your first date.</h1>
+
+  <div class="fd-ask" id="fd-gate">
+    <p class="rule">Before you scroll — have you already asked the person wearing this?</p>
+    <p class="script">"Okay — tell me about your worst first date."</p>
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap;">
+      <button class="btn small" id="fd-asked">Yes, we talked — show me the wall</button>
+      <button class="btn ghost small" id="fd-skip">Not yet, just let me see it</button>
+    </div>
+  </div>
+
+  <div id="fd-wall-section" style="display:none;">
+  <p class="fd-sub" style="margin-top:44px;">Every scan of this shirt can add a line to this wall. Here's what strangers have shared so far —</p>
+
+  <div class="fd-wall" id="fd-wall">
+    <div class="fd-story">We split a pizza and I dropped a slice cheese-down on his white sneakers. We've been married six years.<span class="tag">— shared at a bus stop</span></div>
+    <div class="fd-story">She brought a deck of cards to a coffee shop in case the conversation died. It never did.<span class="tag">— shared at a Nairobi meetup</span></div>
+    <div class="fd-story">He showed up with the wrong sister's number saved in his phone. I still don't know how that happened.<span class="tag">— shared on a train</span></div>
+    <div class="fd-story">First date, first fight, over pineapple on pizza. Second date happened anyway.<span class="tag">— shared at a bar</span></div>
+  </div>
+  <p class="fd-hook">This shirt has heard <strong id="fd-count">142</strong> stories. Yours could be next.</p>
+
+  <div class="fd-add">
+    <label for="fd-input">Add your own line to the wall (one sentence):</label>
+    <div class="fd-add-row">
+      <input type="text" id="fd-input" maxlength="140" placeholder="My worst/best first date was...">
+      <button class="btn small" id="fd-submit">Add</button>
+    </div>
+    <p class="fd-thanks" id="fd-thanks">Added — thank you for that.</p>
+  </div>
+
+  <hr class="fd-divider">
+
+  <div class="fd-ask" style="background:var(--oatmeal);">
+    <p class="rule" style="margin-bottom:10px;">Liked being the one to start this?</p>
+    <p style="font-family:'Space Grotesk', sans-serif; font-size:1.1rem; margin:0 0 20px;">Get a shirt that starts one for you.</p>
+    <a href="index.html#shop" class="btn small">Shop the collection</a>
+    <a href="customize.html" class="btn ghost small" style="margin-left:10px;">Design your own</a>
+  </div>
+  </div>
+</section>
+
+<footer><div class="wrap">← <a href="index.html">Back to Let's Talk</a></div></footer>
+
+<script>
+// ---- GATE: nudge an in-person ask before revealing the wall ----
+function revealWall() {
+  document.getElementById("fd-gate").style.display = "none";
+  document.getElementById("fd-wall-section").style.display = "block";
+}
+document.getElementById("fd-asked").addEventListener("click", revealWall);
+document.getElementById("fd-skip").addEventListener("click", revealWall);
+
+// ---- BACKEND: fill these in from your Supabase project settings ----
+// Settings -> API -> Project URL, and Project API keys -> anon public
+const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+const PAGE_ID = "first-date";
+
+const backendConfigured = SUPABASE_URL.startsWith("http");
+const sb = backendConfigured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+async function loadStories() {
+  if (!backendConfigured) return; // keep the 4 hardcoded sample stories as-is
+  const { data, error } = await sb
+    .from("stories")
+    .select("content")
+    .eq("page", PAGE_ID)
+    .order("created_at", { ascending: false })
+    .limit(30);
+  if (error || !data || data.length === 0) return; // fall back to samples already in the HTML
+  const wall = document.getElementById("fd-wall");
+  wall.innerHTML = "";
+  data.forEach((row) => {
+    const div = document.createElement("div");
+    div.className = "fd-story";
+    div.textContent = row.content;
+    wall.appendChild(div);
+  });
+}
+
+document.getElementById("fd-submit").addEventListener("click", async () => {
+  const input = document.getElementById("fd-input");
+  const val = input.value.trim();
+  if (!val) return;
+
+  if (backendConfigured) {
+    const { error } = await sb.from("stories").insert({ page: PAGE_ID, content: val });
+    if (error) { console.error(error); return; }
+    await loadStories();
+  } else {
+    // no backend configured yet: show it locally so the demo still feels alive
+    const wall = document.getElementById("fd-wall");
+    const div = document.createElement("div");
+    div.className = "fd-story";
+    div.textContent = val;
+    wall.prepend(div);
+  }
+
+  input.value = "";
+  document.getElementById("fd-thanks").style.display = "block";
+});
+
+loadStories();
+</script>
+</body>
+</html>
