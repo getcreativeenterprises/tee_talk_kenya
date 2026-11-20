@@ -107,7 +107,7 @@ form.addEventListener("submit", async (e) => {
   }
 
   const lines = [
-    "Hello LET'S TALK Team! 👋",
+    `Hello ${BRAND} Team! 👋`,
     "",
     "I would like to place an order:",
     "",
