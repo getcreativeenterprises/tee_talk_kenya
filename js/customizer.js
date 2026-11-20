@@ -121,7 +121,7 @@ document.getElementById("cz-order").addEventListener("click", () => {
   const garmentLabel = state.garment === "tee" ? "Custom T-Shirt" : "Custom Cap";
   const summary = `${garmentLabel} | Text: "${state.text}" | Color: ${state.color} | Font: ${state.font}` +
     (state.qrOn ? ` | QR: ${state.qrDest}` : "");
-  openOrderModal(summary, "");
+  openOrderModal(summary, "", state.text);
 });
 
 render();
