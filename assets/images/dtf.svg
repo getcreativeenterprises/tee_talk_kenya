@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <defs>
+    <pattern id="weave" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="#E6E0D4"/>
+      <path d="M0 3h6M3 0v6" stroke="#DDD6C8" stroke-width="0.6"/>
+    </pattern>
+  </defs>
+  <rect width="300" height="200" fill="url(#weave)"/>
+  <text x="150" y="115" text-anchor="middle" font-family="Courier New, monospace" font-weight="700" font-size="64" fill="#1A1A1A">TALK</text>
+  <text x="150" y="185" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#888">illustration - replace with dtf.jpg</text>
+</svg>
