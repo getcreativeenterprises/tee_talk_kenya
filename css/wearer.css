@@ -50,3 +50,26 @@
 .order-success .step { margin-top: 18px; }
 .order-success .step .lbl { display: block; font-size: 0.75rem; color: #444; margin-bottom: 8px; }
 .order-success .btn { text-align: center; }
+
+/* ---------- Order popup: compact, scrolls from the top on small screens ---------- */
+.modal-overlay { align-items: flex-start; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
+.modal { margin: auto; width: 100%; max-width: 400px; max-height: none; overflow: visible; padding: 20px; position: relative; }
+.modal h3 { font-size: 1.05rem; padding-right: 28px; }
+.modal .modal-sub { margin: 4px 0 14px; font-size: 0.75rem; }
+.modal .field { margin-bottom: 10px; }
+.modal .field input { padding: 8px 10px; }
+.modal .modal-actions { margin-top: 14px; }
+.close-modal { position: absolute; top: 12px; right: 14px; float: none; font-size: 1.3rem; line-height: 1; }
+.finish-opts { display: flex; gap: 8px; }
+.finish-opt { flex: 1; position: relative; cursor: pointer; }
+.finish-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.finish-opt span { display: block; text-align: center; padding: 9px 6px; border: 1px solid var(--tan); border-radius: 4px; background: var(--oatmeal); font-size: 0.8rem; }
+.finish-opt:has(input:checked) span { border-color: var(--ink); background: var(--sand); box-shadow: 0 0 0 1px var(--ink); }
+.order-success .step { margin-top: 12px; }
+.order-success h3 { font-size: 1.05rem; }
+
+/* ---------- Customizer dropdowns ---------- */
+.select-row { display: flex; align-items: center; gap: 10px; }
+.select-row select { flex: 1; }
+.chip { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--ink); flex-shrink: 0; }
+.cz-warn { color: var(--red); font-size: 0.72rem; margin: 8px 0 0; display: none; }
