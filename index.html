@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TEE TALK — Wearable Icebreakers</title>
+<title>Tee Talk — Wearable Icebreakers</title>
 <meta name="description" content="T-shirts and caps with scannable QR prompts, built to start real conversations with strangers.">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/wearer.css">
@@ -17,7 +17,6 @@
       <ul class="nav-links">
         <li><a href="#shop">Shop</a></li>
         <li><a href="customize.html">Customizer</a></li>
-        <li><a href="#events">Events</a></li>
         <li><a href="tracking.html">Track Order</a></li>
       </ul>
     </nav>
@@ -37,9 +36,9 @@
     <div class="hero-tee">
       <svg viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M60 10 L20 40 L35 70 L55 58 L55 220 L145 220 L145 58 L165 70 L180 40 L140 10 L120 22 C110 30 90 30 80 22 Z" fill="#F3EFE6" stroke="#1A1A1A" stroke-width="3"/>
-        <text x="100" y="140" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#1A1A1A">TWO TRUTHS</text>
-        <text x="100" y="155" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#1A1A1A">AND A LIE.</text>
-        <text x="100" y="170" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#1A1A1A">GUESS WHICH.</text>
+        <text x="100" y="140" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#1A1A1A">DOGS OR CATS?</text>
+        <text x="100" y="155" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#1A1A1A">CONVINCE</text>
+        <text x="100" y="170" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" fill="#1A1A1A">ME.</text>
       </svg>
       <div class="qr-tag">▦ scan me</div>
     </div>
@@ -58,39 +57,25 @@
   </div>
 </section>
 
-<section class="section" id="events">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <h2>Community Board</h2>
-        <p>Screen-free meetups for people who'd rather talk to a stranger than a feed.</p>
-      </div>
-    </div>
-    <div class="qr-strip">
-      <div class="qr-card">
-        <h3>Nairobi Icebreaker Mixer</h3>
-        <p>Sat, 27 Sep · Karura Forest Gate C · Wear a Let's Talk piece, get first round on us.</p>
-      </div>
-      <div class="qr-card">
-        <h3>The Bracket, Live</h3>
-        <p>Fri, 3 Oct · Alliance Française Courtyard · Dogs vs Cats settled in person.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <footer>
-  <div class="wrap">© 2026 TEE TALK. Wearables that talk first.</div>
+  <div class="wrap">© 2026 Tee Talk. Wearables that talk first.</div>
 </footer>
 
-<!-- Order Modal -->
+<!-- Order popup -->
 <div class="modal-overlay" id="order-overlay">
   <div class="modal">
-    <button class="close-modal" data-close-modal>×</button>
-    <h3>Order via WhatsApp</h3>
-    <p class="modal-sub">We create your private Tee Talk page, then you send the order to us on WhatsApp.</p>
+    <button class="close-modal" data-close-modal aria-label="Close">&times;</button>
     <form id="order-form">
+      <h3>Your order</h3>
+      <p class="modal-sub">We set up your private Tee Talk page, then you send the order to us on WhatsApp.</p>
       <input type="hidden" id="order-item">
+      <div class="field">
+        <label>Finish</label>
+        <div class="finish-opts">
+          <label class="finish-opt"><input type="radio" name="finish" value="Embroidery" checked><span>Embroidery</span></label>
+          <label class="finish-opt"><input type="radio" name="finish" value="DTF Print"><span>DTF Print</span></label>
+        </div>
+      </div>
       <div class="field">
         <label for="order-name">Your name</label>
         <input type="text" id="order-name" required>
@@ -103,55 +88,29 @@
         <label for="order-phone">Phone number</label>
         <input type="tel" id="order-phone" required>
       </div>
-      <div class="field">
-        <label>Finish</label>
-        <div class="finish-options">
-          <label class="finish-card">
-            <input type="radio" name="finish" value="Embroidery" checked>
-            <img src="assets/images/embroidery.jpg" onerror="this.onerror=null;this.src='assets/images/embroidery.svg'" alt="Close-up of embroidered text">
-            <span class="finish-title">Embroidery</span>
-            <span class="finish-desc">Raised stitched thread with a premium, textured feel. Best for bold text.</span>
-          </label>
-          <label class="finish-card">
-            <input type="radio" name="finish" value="DTF Print">
-            <img src="assets/images/dtf.jpg" onerror="this.onerror=null;this.src='assets/images/dtf.svg'" alt="Close-up of DTF printed text">
-            <span class="finish-title">DTF Print</span>
-            <span class="finish-desc">Flat, crisp print. Sharpest for fine detail like QR codes.</span>
-          </label>
-        </div>
-      </div>
       <div class="modal-actions">
-        <button type="submit" class="btn full">Confirm &amp; continue</button>
+        <button type="submit" class="btn full">Continue</button>
       </div>
     </form>
     <div class="order-success" id="order-success" style="display:none;">
       <h3>Order <span id="os-id"></span> created</h3>
       <p class="modal-sub" id="os-sub"></p>
       <div class="step">
-        <span class="lbl">Step 1: send your order to us</span>
-        <a class="btn full" id="os-wa" href="#" target="_blank" rel="noopener">Send order on WhatsApp</a>
+        <a class="btn full" id="os-wa" href="#" target="_blank" rel="noopener">1. Send order on WhatsApp</a>
       </div>
       <div class="step" id="os-edit-step">
-        <span class="lbl">Step 2: save your private edit link. This is where you set up your page.</span>
+        <span class="lbl">2. Save your private edit link. It sets up your page.</span>
         <div class="copy-row"><input id="os-edit" readonly><button type="button" class="btn small" id="os-copy">Copy</button></div>
-        <p class="tt-small">Anyone with this link can edit your page, so keep it private. It also goes to us with your order.</p>
-        <a class="btn ghost small full" id="os-open" href="#" target="_blank" rel="noopener" style="margin-top:10px;">Open my page editor</a>
+        <p class="tt-small">Keep it private: anyone with it can edit your page. <a id="os-open" href="#" target="_blank" rel="noopener">Open my page editor</a></p>
       </div>
     </div>
   </div>
 </div>
 
+<script src="js/shop-config.js"></script>
 <script>
-const products = [
-  { name: "The Warning", prompt: "\u201cAsk me what I did last Tuesday.\u201d", price: "KSh 1,800" },
-  { name: "The Conspiracy", prompt: "\u201cI have a theory. You won't like it.\u201d", price: "KSh 1,800" },
-  { name: "The Bracket", prompt: "Dogs vs Cats. Scan and pick a side.", price: "KSh 1,900" },
-  { name: "The Icebreaker", prompt: "Two truths, one lie. Guess right.", price: "KSh 1,900" },
-  { name: "The Timer", prompt: "\u201cYou have 5 minutes to change my mind.\u201d", price: "KSh 2,000" },
-];
-
 const grid = document.getElementById("catalog");
-grid.innerHTML = products.map((p) => `
+grid.innerHTML = PRODUCTS.map((p) => `
   <div class="card">
     <div class="card-art">
       <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -161,9 +120,9 @@ grid.innerHTML = products.map((p) => `
     </div>
     <div class="card-body">
       <h3>${p.name}</h3>
-      <p class="prompt">${p.prompt}</p>
+      <p class="prompt">${p.slogan}</p>
       <p class="price">${p.price}</p>
-      <button class="btn small full" data-order-item="${p.name}" data-order-price="${p.price}" data-order-slogan="${p.prompt.replace(/[\u201c\u201d"]/g, '')}">Order via WhatsApp</button>
+      <button class="btn small full" data-order-item="${p.name}" data-order-price="${p.price}" data-order-slogan="${p.slogan}">Order via WhatsApp</button>
     </div>
   </div>
 `).join("");

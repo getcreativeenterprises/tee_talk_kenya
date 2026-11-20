@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Track Your Order — LET'S TALK</title>
+<title>Track Your Order — Tee Talk</title>
 <link rel="stylesheet" href="css/styles.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/supabase-config.js"></script>
+<script src="js/site-config.js"></script>
 </head>
 <body>
 
 <header class="site-header">
   <div class="wrap">
-    <a href="index.html" class="logo">LET'S <span>TALK</span></a>
+    <a href="index.html" class="logo">TEE <span>TALK</span></a>
   </div>
 </header>
 
@@ -32,14 +33,15 @@
     </div>
 
     <div id="track-notfound" style="display:none; margin-top:20px; font-size:0.85rem; color:#5a5a5a;">
-      Lost your tracking history, or ordering from a new device? <a href="https://wa.me/254700000000?text=Hi%2C%20I%27d%20like%20to%20check%20the%20status%20of%20my%20order." target="_blank" style="text-decoration:underline;">Tap here to ask on WhatsApp</a>.
+      Lost your tracking history, or ordering from a new device? <a id="wa-fallback" href="#" target="_blank" style="text-decoration:underline;">Tap here to ask on WhatsApp</a>.
     </div>
   </div>
 </section>
 
-<footer><div class="wrap">© 2026 LET'S TALK.</div></footer>
+<footer><div class="wrap">© 2026 Tee Talk.</div></footer>
 
 <script>
+document.getElementById("wa-fallback").href = "https://wa.me/" + STORE_WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Hi, I'd like to check the status of my order.");
 const STAGES = [
   { key: "placed", label: "Order placed" },
   { key: "crafting", label: "Crafting & embroidery" },

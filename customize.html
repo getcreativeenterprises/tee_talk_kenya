@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Design Your Own — LET'S TALK</title>
+<title>Design Your Own — Tee Talk</title>
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/customizer.css">
 <link rel="stylesheet" href="css/wearer.css">
@@ -12,7 +12,7 @@
 
 <header class="site-header">
   <div class="wrap">
-    <a href="index.html" class="logo">LET'S <span>TALK</span></a>
+    <a href="index.html" class="logo">TEE <span>TALK</span></a>
     <nav>
       <ul class="nav-links">
         <li><a href="index.html#shop">Shop</a></li>
@@ -44,50 +44,33 @@
         </div>
 
         <div class="cz-group">
-          <label class="group-label">Base color</label>
-          <div class="swatches">
-            <button class="swatch active" style="background:#F3EFE6" data-color="#F3EFE6" title="Cream White"></button>
-            <button class="swatch" style="background:#5C5C5C" data-color="#5C5C5C" title="Asphalt Grey"></button>
-            <button class="swatch" style="background:#A3B19B" data-color="#A3B19B" title="Sage Green"></button>
-            <button class="swatch" style="background:#1A1A1A" data-color="#1A1A1A" title="Vintage Black"></button>
-          </div>
+          <label class="group-label" for="cz-base">Shirt color</label>
+          <div class="select-row"><span class="chip" id="base-chip"></span><select id="cz-base" class="cz-input"></select></div>
         </div>
 
         <div class="cz-group">
           <label class="group-label" for="cz-text">Front text (max 35 characters)</label>
-          <input type="text" id="cz-text" class="cz-input" maxlength="35" value="TELL ME 2 TRUTHS AND A LIE.">
+          <input type="text" id="cz-text" class="cz-input" maxlength="35" value="DOGS OR CATS? CONVINCE ME.">
           <div class="char-count"><span id="cz-count">27</span>/35</div>
         </div>
 
         <div class="cz-group">
-          <label class="group-label">Text color</label>
-          <div class="swatches">
-            <button class="swatch active" style="background:#1A1A1A" data-textcolor="#1A1A1A" title="Charcoal"></button>
-            <button class="swatch" style="background:#FBF8F3" data-textcolor="#FBF8F3" title="Cream"></button>
-            <button class="swatch" style="background:#B4483A" data-textcolor="#B4483A" title="Muted Red"></button>
-            <button class="swatch" style="background:#3E5C3A" data-textcolor="#3E5C3A" title="Forest Green"></button>
-          </div>
+          <label class="group-label" for="cz-textcolor">Text color</label>
+          <div class="select-row"><span class="chip" id="text-chip"></span><select id="cz-textcolor" class="cz-input"></select></div>
+          <p class="cz-warn" id="cz-warn">This text color is hard to read on this shirt color. Try another.</p>
         </div>
 
         <div class="cz-group">
           <label class="group-label">Typography</label>
-          <div class="font-options">
-            <button class="font-option active" data-font="mono">Typewriter</button>
-            <button class="font-option" data-font="script">Calligraphic</button>
-            <button class="font-option" data-font="grotesk">Clean Grotesk</button>
-          </div>
+          <div class="font-options" id="font-options"></div>
         </div>
 
         <div class="cz-group">
           <div class="toggle-row">
-            <label class="group-label" style="margin:0;">Add QR code on back</label>
-            <button class="toggle" id="qr-toggle"></button>
+            <label class="group-label" style="margin:0;">QR code on the back</label>
+            <button class="toggle on" id="qr-toggle"></button>
           </div>
-          <select class="cz-input" id="qr-dest" style="margin-top:10px; display:none;">
-            <option>Dogs vs Cats Community Poll</option>
-            <option>Two Truths and a Lie</option>
-            <option>My personal link (add at checkout)</option>
-          </select>
+          <p class="tt-small" style="margin-top:8px;">Every shirt gets its own private Tee Talk page, which you set up after ordering.</p>
         </div>
 
         <button class="btn full" id="cz-order">Order this design via WhatsApp</button>
@@ -107,15 +90,22 @@
   </div>
 </section>
 
-<footer><div class="wrap">© 2026 LET'S TALK.</div></footer>
+<footer><div class="wrap">© 2026 Tee Talk.</div></footer>
 
 <div class="modal-overlay" id="order-overlay">
   <div class="modal">
-    <button class="close-modal" data-close-modal>×</button>
-    <h3>Order via WhatsApp</h3>
-    <p class="modal-sub">We create your private Tee Talk page, then you send the order to us on WhatsApp.</p>
+    <button class="close-modal" data-close-modal aria-label="Close">&times;</button>
     <form id="order-form">
+      <h3>Your order</h3>
+      <p class="modal-sub">We set up your private Tee Talk page, then you send the order to us on WhatsApp.</p>
       <input type="hidden" id="order-item">
+      <div class="field">
+        <label>Finish</label>
+        <div class="finish-opts">
+          <label class="finish-opt"><input type="radio" name="finish" value="Embroidery" checked><span>Embroidery</span></label>
+          <label class="finish-opt"><input type="radio" name="finish" value="DTF Print"><span>DTF Print</span></label>
+        </div>
+      </div>
       <div class="field">
         <label for="order-name">Your name</label>
         <input type="text" id="order-name" required>
@@ -128,39 +118,20 @@
         <label for="order-phone">Phone number</label>
         <input type="tel" id="order-phone" required>
       </div>
-      <div class="field">
-        <label>Finish</label>
-        <div class="finish-options">
-          <label class="finish-card">
-            <input type="radio" name="finish" value="Embroidery" checked>
-            <img src="assets/images/embroidery.jpg" onerror="this.onerror=null;this.src='assets/images/embroidery.svg'" alt="Close-up of embroidered text">
-            <span class="finish-title">Embroidery</span>
-            <span class="finish-desc">Raised stitched thread with a premium, textured feel. Best for bold text.</span>
-          </label>
-          <label class="finish-card">
-            <input type="radio" name="finish" value="DTF Print">
-            <img src="assets/images/dtf.jpg" onerror="this.onerror=null;this.src='assets/images/dtf.svg'" alt="Close-up of DTF printed text">
-            <span class="finish-title">DTF Print</span>
-            <span class="finish-desc">Flat, crisp print. Sharpest for fine detail like QR codes.</span>
-          </label>
-        </div>
-      </div>
       <div class="modal-actions">
-        <button type="submit" class="btn full">Confirm &amp; continue</button>
+        <button type="submit" class="btn full">Continue</button>
       </div>
     </form>
     <div class="order-success" id="order-success" style="display:none;">
       <h3>Order <span id="os-id"></span> created</h3>
       <p class="modal-sub" id="os-sub"></p>
       <div class="step">
-        <span class="lbl">Step 1: send your order to us</span>
-        <a class="btn full" id="os-wa" href="#" target="_blank" rel="noopener">Send order on WhatsApp</a>
+        <a class="btn full" id="os-wa" href="#" target="_blank" rel="noopener">1. Send order on WhatsApp</a>
       </div>
       <div class="step" id="os-edit-step">
-        <span class="lbl">Step 2: save your private edit link. This is where you set up your page.</span>
+        <span class="lbl">2. Save your private edit link. It sets up your page.</span>
         <div class="copy-row"><input id="os-edit" readonly><button type="button" class="btn small" id="os-copy">Copy</button></div>
-        <p class="tt-small">Anyone with this link can edit your page, so keep it private. It also goes to us with your order.</p>
-        <a class="btn ghost small full" id="os-open" href="#" target="_blank" rel="noopener" style="margin-top:10px;">Open my page editor</a>
+        <p class="tt-small">Keep it private: anyone with it can edit your page. <a id="os-open" href="#" target="_blank" rel="noopener">Open my page editor</a></p>
       </div>
     </div>
   </div>
@@ -168,6 +139,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/supabase-config.js"></script>
+<script src="js/shop-config.js"></script>
 <script src="js/customizer.js"></script>
 <script src="js/site-config.js"></script>
 <script src="js/whatsapp.js"></script>
