@@ -1,0 +1,52 @@
+/* Styles for wearer pages, the QR page and the checkout success view */
+.tt-wrap { max-width: 620px; margin: 0 auto; padding: 56px 24px 90px; }
+.tt-slogan { font-size: clamp(1.7rem, 5.2vw, 2.6rem); letter-spacing: -0.015em; text-transform: uppercase; }
+.tt-by { margin: 12px 0 0; color: #5a5a5a; font-size: 0.9rem; }
+.tt-about { margin: 22px 0 0; white-space: pre-wrap; font-size: 0.95rem; }
+.tt-muted { color: #5a5a5a; font-size: 0.85rem; }
+.tt-nudge { margin-top: 32px; border: 1px solid var(--ink); border-radius: 8px; padding: 22px 20px; text-align: center; background: var(--cream); }
+.tt-nudge .lbl { font-size: 0.75rem; color: #5a5a5a; margin: 0 0 8px; }
+.tt-nudge .say { font-family: 'Caveat', cursive; font-size: 1.7rem; color: var(--red); margin: 0; line-height: 1.2; }
+.tt-section { margin-top: 40px; }
+.tt-section h2 { font-size: 1.15rem; margin-bottom: 14px; }
+.tt-input, .tt-textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--tan); border-radius: 4px; background: var(--oatmeal); font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--ink); }
+.tt-textarea { min-height: 84px; resize: vertical; }
+.tt-field { margin-bottom: 14px; }
+.tt-field label.lbl { display: block; font-size: 0.75rem; color: #444; margin-bottom: 6px; }
+.tt-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.tt-err { color: var(--red); font-size: 0.8rem; margin-top: 8px; min-height: 1em; }
+.tt-ok { color: #4d6b45; font-size: 0.8rem; margin-top: 8px; min-height: 1em; }
+.tt-small { font-size: 0.72rem; color: #777; margin-top: 10px; }
+.tt-small a { color: inherit; }
+.tt-pill { display: inline-block; font-size: 0.72rem; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--ink); }
+.tt-pill.live { background: var(--sage); border-color: var(--sage); }
+.tt-pill.wait { background: var(--sand); border-color: var(--sand); }
+.tt-pill.off { background: transparent; }
+.tt-card { border: 1px solid var(--tan); border-radius: 6px; background: var(--oatmeal); padding: 16px; margin-bottom: 12px; }
+.tt-check { display: flex; gap: 10px; align-items: flex-start; font-size: 0.85rem; margin-bottom: 12px; cursor: pointer; }
+.tt-check input { margin-top: 3px; }
+.copy-row { display: flex; gap: 8px; }
+.copy-row input { flex: 1; min-width: 0; padding: 9px 10px; border: 1px solid var(--tan); border-radius: 4px; background: var(--cream); font-family: 'Space Mono', monospace; font-size: 0.72rem; }
+.msgs { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+.msg { max-width: 86%; padding: 10px 12px; border-radius: 8px; font-size: 0.88rem; white-space: pre-wrap; word-break: break-word; }
+.msg .who { display: block; font-size: 0.66rem; color: #777; margin-bottom: 4px; }
+.msg.scanner { align-self: flex-end; background: var(--oatmeal); border: 1px solid var(--tan); }
+.msg.wearer { align-self: flex-start; background: var(--cream); border: 1px solid var(--ink); }
+.thread-head { display: flex; justify-content: space-between; gap: 10px; cursor: pointer; align-items: baseline; }
+.thread-head strong { font-family: 'Space Grotesk', sans-serif; }
+.badge { font-size: 0.66rem; padding: 2px 8px; border-radius: 99px; background: var(--red); color: var(--cream); }
+.badge.muted { background: var(--tan); color: var(--ink); }
+.tt-danger { margin-top: 56px; padding-top: 24px; border-top: 1px dashed var(--tan); }
+.btn.danger { border-color: var(--red); color: var(--red); background: transparent; }
+.tt-center { text-align: center; padding: 90px 0; }
+.tt-center h1 { font-size: 1.6rem; margin-bottom: 12px; }
+
+/* QR page */
+.qr-box { background: #fff; border: 1px solid var(--tan); border-radius: 6px; padding: 14px; max-width: 360px; margin: 24px 0; }
+.qr-box svg { width: 100%; height: auto; display: block; }
+
+/* Checkout success view */
+.order-success h3 { font-size: 1.15rem; margin-bottom: 6px; }
+.order-success .step { margin-top: 18px; }
+.order-success .step .lbl { display: block; font-size: 0.75rem; color: #444; margin-bottom: 8px; }
+.order-success .btn { text-align: center; }
