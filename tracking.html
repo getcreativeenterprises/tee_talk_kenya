@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Track Your Order — TEE TALK</title>
+<title>Track Your Order — LET'S TALK</title>
 <link rel="stylesheet" href="css/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
 </head>
 <body>
 
@@ -26,11 +28,7 @@
 
     <div id="track-result" style="margin-top:20px; display:none;">
       <p><strong id="track-item"></strong></p>
-      <ul class="step-list">
-        <li class="done"><span class="dot"></span> Order placed</li>
-        <li class="active"><span class="dot"></span> Crafting &amp; embroidery</li>
-        <li><span class="dot"></span> Out for delivery</li>
-      </ul>
+      <ul class="step-list" id="track-steps"></ul>
     </div>
 
     <div id="track-notfound" style="display:none; margin-top:20px; font-size:0.85rem; color:#5a5a5a;">
@@ -42,21 +40,60 @@
 <footer><div class="wrap">© 2026 LET'S TALK.</div></footer>
 
 <script>
-document.getElementById("track-btn").addEventListener("click", () => {
-  const id = document.getElementById("track-input").value.trim().toUpperCase();
-  const orders = JSON.parse(localStorage.getItem("lt_orders") || "[]");
-  const match = orders.find((o) => o.id.toUpperCase() === id);
+const STAGES = [
+  { key: "placed", label: "Order placed" },
+  { key: "crafting", label: "Crafting & embroidery" },
+  { key: "out_for_delivery", label: "Out for delivery" },
+  { key: "delivered", label: "Delivered" },
+];
+
+function renderSteps(status) {
+  const idx = STAGES.findIndex((s) => s.key === status);
+  const currentIndex = idx === -1 ? 0 : idx;
+  const list = document.getElementById("track-steps");
+  list.innerHTML = STAGES.filter((s) => s.key !== "delivered" || status === "delivered")
+    .map((s, i) => {
+      let cls = "";
+      if (i < currentIndex || status === "delivered") cls = "done";
+      else if (i === currentIndex) cls = "active";
+      return `<li class="${cls}"><span class="dot"></span> ${s.label}</li>`;
+    }).join("");
+}
+
+async function checkOrder(id) {
   const result = document.getElementById("track-result");
   const notFound = document.getElementById("track-notfound");
 
+  if (backendConfigured) {
+    const { data, error } = await sb.rpc("get_order_status", { order_id: id });
+    if (!error && data && data.length > 0) {
+      const order = data[0];
+      document.getElementById("track-item").textContent = `${order.item} — #${order.id}`;
+      renderSteps(order.status);
+      result.style.display = "block";
+      notFound.style.display = "none";
+      return;
+    }
+  }
+
+  // fallback: check this browser's local order history
+  const orders = JSON.parse(localStorage.getItem("lt_orders") || "[]");
+  const match = orders.find((o) => o.id.toUpperCase() === id);
   if (match) {
     document.getElementById("track-item").textContent = `${match.item} — #${match.id}`;
+    renderSteps(match.status || "placed");
     result.style.display = "block";
     notFound.style.display = "none";
   } else {
     result.style.display = "none";
     notFound.style.display = "block";
   }
+}
+
+document.getElementById("track-btn").addEventListener("click", () => {
+  const id = document.getElementById("track-input").value.trim().toUpperCase();
+  if (!id) return;
+  checkOrder(id);
 });
 </script>
 </body>

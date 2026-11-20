@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TEE TALK — Wearable Icebreakers</title>
+<title>LET'S TALK — Wearable Icebreakers</title>
 <meta name="description" content="T-shirts and caps with scannable QR prompts, built to start real conversations with strangers.">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/wearer.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="wrap">
-    <a href="#" class="logo">TEE <span>TALK</span></a>
+    <a href="#" class="logo">LET'S <span>TALK</span></a>
     <nav>
       <ul class="nav-links">
         <li><a href="#shop">Shop</a></li>
         <li><a href="customize.html">Customizer</a></li>
-        <li><a href="#scans">Scan Pages</a></li>
         <li><a href="#events">Events</a></li>
         <li><a href="tracking.html">Track Order</a></li>
       </ul>
@@ -58,34 +58,6 @@
   </div>
 </section>
 
-<section class="section alt" id="scans">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <h2>Scan Destinations</h2>
-        <p>Every QR code on a garment leads to a live page like these — no app, no login, just scan and respond.</p>
-      </div>
-    </div>
-    <div class="qr-strip">
-      <div class="qr-card">
-        <h3>The Bracket — Dogs vs Cats</h3>
-        <p>A running poll. Scan, pick a side, see the live split, then argue about it with the wearer.</p>
-        <a href="dogs-vs-cats.html">Open scan page →</a>
-      </div>
-      <div class="qr-card">
-        <h3>Two Truths and a Lie</h3>
-        <p>Three statements from the wearer. Strangers scan and guess which one isn't true.</p>
-        <a href="two-truths.html">Open scan page →</a>
-      </div>
-      <div class="qr-card">
-        <h3>Tell Me About Your First Date</h3>
-        <p>A growing wall of stranger stories — plus a nudge to ask the wearer for theirs, out loud.</p>
-        <a href="first-date.html">Open scan page →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section class="section" id="events">
   <div class="wrap">
     <div class="section-head">
@@ -116,7 +88,7 @@
   <div class="modal">
     <button class="close-modal" data-close-modal>×</button>
     <h3>Order via WhatsApp</h3>
-    <p class="modal-sub">We'll pre-fill your order and open WhatsApp so you can send it directly to us.</p>
+    <p class="modal-sub">We create your private Tee Talk page, then you send the order to us on WhatsApp.</p>
     <form id="order-form">
       <input type="hidden" id="order-item">
       <div class="field">
@@ -131,10 +103,41 @@
         <label for="order-phone">Phone number</label>
         <input type="tel" id="order-phone" required>
       </div>
+      <div class="field">
+        <label>Finish</label>
+        <div class="finish-options">
+          <label class="finish-card">
+            <input type="radio" name="finish" value="Embroidery" checked>
+            <img src="assets/images/embroidery.jpg" onerror="this.onerror=null;this.src='assets/images/embroidery.svg'" alt="Close-up of embroidered text">
+            <span class="finish-title">Embroidery</span>
+            <span class="finish-desc">Raised stitched thread with a premium, textured feel. Best for bold text.</span>
+          </label>
+          <label class="finish-card">
+            <input type="radio" name="finish" value="DTF Print">
+            <img src="assets/images/dtf.jpg" onerror="this.onerror=null;this.src='assets/images/dtf.svg'" alt="Close-up of DTF printed text">
+            <span class="finish-title">DTF Print</span>
+            <span class="finish-desc">Flat, crisp print. Sharpest for fine detail like QR codes.</span>
+          </label>
+        </div>
+      </div>
       <div class="modal-actions">
-        <button type="submit" class="btn full">Confirm &amp; Send to WhatsApp</button>
+        <button type="submit" class="btn full">Confirm &amp; continue</button>
       </div>
     </form>
+    <div class="order-success" id="order-success" style="display:none;">
+      <h3>Order <span id="os-id"></span> created</h3>
+      <p class="modal-sub" id="os-sub"></p>
+      <div class="step">
+        <span class="lbl">Step 1: send your order to us</span>
+        <a class="btn full" id="os-wa" href="#" target="_blank" rel="noopener">Send order on WhatsApp</a>
+      </div>
+      <div class="step" id="os-edit-step">
+        <span class="lbl">Step 2: save your private edit link. This is where you set up your page.</span>
+        <div class="copy-row"><input id="os-edit" readonly><button type="button" class="btn small" id="os-copy">Copy</button></div>
+        <p class="tt-small">Anyone with this link can edit your page, so keep it private. It also goes to us with your order.</p>
+        <a class="btn ghost small full" id="os-open" href="#" target="_blank" rel="noopener" style="margin-top:10px;">Open my page editor</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -160,11 +163,14 @@ grid.innerHTML = products.map((p) => `
       <h3>${p.name}</h3>
       <p class="prompt">${p.prompt}</p>
       <p class="price">${p.price}</p>
-      <button class="btn small full" data-order-item="${p.name}" data-order-price="${p.price}">Order via WhatsApp</button>
+      <button class="btn small full" data-order-item="${p.name}" data-order-price="${p.price}" data-order-slogan="${p.prompt.replace(/[\u201c\u201d"]/g, '')}">Order via WhatsApp</button>
     </div>
   </div>
 `).join("");
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/site-config.js"></script>
 <script src="js/whatsapp.js"></script>
 </body>
 </html>

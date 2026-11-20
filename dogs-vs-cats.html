@@ -16,7 +16,7 @@
 
 <section class="poll-wrap">
   <div class="wrap">
-    <h1>The ultimate debate:<br>dogs or cats?</h1>
+    <h1>Dogs or cats?<br>They need convincing.</h1>
     <div class="poll-options" id="poll-options">
       <button class="poll-btn" data-choice="dogs">🐕 Dogs</button>
       <button class="poll-btn" data-choice="cats">🐈 Cats</button>
@@ -32,7 +32,8 @@
         <div class="bar-track"><div class="bar-fill" id="bar-cats"></div></div>
         <div id="pct-cats"></div>
       </div>
-      <p class="poll-message">Say this: "Okay, be honest — dogs or cats, and why?"</p>
+      <p style="font-size:1.05rem; margin-top:34px;">You picked <strong id="pick-name"></strong>. Now convince the person wearing this.</p>
+      <p class="poll-message" style="margin-top:12px;">Say this: "I'm team <span id="pick-name2"></span>. Let me convince you."</p>
     </div>
   </div>
 </section>
@@ -49,6 +50,9 @@ document.querySelectorAll(".poll-btn").forEach((btn) => {
     document.getElementById("bar-cats").style.width = cats + "%";
     document.getElementById("pct-dogs").textContent = dogs + "%";
     document.getElementById("pct-cats").textContent = cats + "%";
+    const pick = btn.dataset.choice === "dogs" ? "Dogs" : "Cats";
+    document.getElementById("pick-name").textContent = pick;
+    document.getElementById("pick-name2").textContent = pick;
     document.getElementById("poll-result").classList.add("show");
     document.getElementById("poll-options").style.display = "none";
   });

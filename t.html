@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>LET'S TALK</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/wearer.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/site-config.js"></script>
+<script src="js/tee-common.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="wrap"><a href="index.html" class="logo">LET'S <span>TALK</span></a></div></header>
+<main class="tt-wrap" id="app"><p class="tt-muted">Loading...</p></main>
+
+<script>
+const code = (new URLSearchParams(location.search).get("c") || "").trim();
+const app = document.getElementById("app");
+let teeInfo = null;
+let threadId = null;
+let pollTimer = null;
+
+function showNotice(title, sub) {
+  app.innerHTML = "";
+  const box = mk("div", "tt-center");
+  box.appendChild(mk("h1", "", title));
+  if (sub) box.appendChild(mk("p", "tt-muted", sub));
+  const back = mk("p", "tt-small");
+  const a = mk("a", "", "Get your own Tee Talk shirt"); a.href = "index.html#shop";
+  back.appendChild(a); box.appendChild(back);
+  app.appendChild(box);
+}
+
+async function init() {
+  if (!backendConfigured || !code) return showNotice("This page isn't available.");
+  const { data, error } = await sb.rpc("get_tee_public", { p_code: code });
+  if (error) return showNotice("Something went wrong.", "Please try again in a moment.");
+  if (!data) return showNotice("We couldn't find this shirt.");
+  if (data.status === "pending") return showNotice("This shirt's page isn't live yet.", "Check back soon.");
+  if (data.status === "paused") return showNotice("This shirt is taking a break.", "Try another day, or just say hi in person.");
+  teeInfo = data;
+  render();
+}
+
+function render() {
+  app.innerHTML = "";
+  app.appendChild(mk("h1", "tt-slogan display", teeInfo.slogan || "Say hi."));
+  if (teeInfo.display_name) app.appendChild(mk("p", "tt-by", "- " + teeInfo.display_name));
+  if (teeInfo.about) app.appendChild(mk("p", "tt-about", teeInfo.about));
+
+  const nudge = mk("div", "tt-nudge");
+  nudge.appendChild(mk("p", "lbl", "Say this out loud:"));
+  nudge.appendChild(mk("p", "say", teeInfo.prompt || "Hi - I saw your shirt. What's the story?"));
+  app.appendChild(nudge);
+
+  const chat = mk("section", "tt-section");
+  if (teeInfo.chat_enabled) {
+    chat.appendChild(mk("h2", "display", "Or leave a message"));
+    const nick = mk("input", "tt-input"); nick.id = "nick"; nick.maxLength = 24; nick.placeholder = "Your nickname (optional)";
+    try { nick.value = localStorage.getItem("tt_nick") || ""; } catch (e) {}
+    const f1 = mk("div", "tt-field"); f1.appendChild(nick);
+    const body = mk("textarea", "tt-textarea"); body.id = "body"; body.maxLength = 500; body.placeholder = "Write something...";
+    const f2 = mk("div", "tt-field"); f2.appendChild(body);
+    const send = mk("button", "btn small", "Send"); send.id = "send";
+    const msgs = mk("div", "msgs"); msgs.id = "msgs";
+    const err = mk("p", "tt-err"); err.id = "err";
+    chat.append(f1, f2, send, err, msgs);
+    chat.appendChild(mk("p", "tt-small", "Your message goes to the wearer without your phone number or email. By sending you confirm you're 18 or over and will be respectful. Replies show up here, so come back to this page on the same phone."));
+    send.addEventListener("click", sendMessage);
+  } else {
+    chat.appendChild(mk("p", "tt-muted", "Messages are off for this shirt. Say hi in person instead."));
+  }
+  app.appendChild(chat);
+
+  const foot = mk("p", "tt-small");
+  const rep = mk("a", "", "Report this page"); rep.href = "#";
+  rep.addEventListener("click", (e) => { e.preventDefault(); reportPage(); });
+  const own = mk("a", "", "Get your own Tee Talk shirt"); own.href = "index.html#shop";
+  foot.append(rep, document.createTextNode("  -  "), own);
+  app.appendChild(foot);
+
+  if (teeInfo.chat_enabled) {
+    threadId = getThreadId(code);
+    loadThread();
+    pollTimer = setInterval(() => { if (document.visibilityState === "visible") loadThread(); }, 15000);
+  }
+}
+
+async function loadThread() {
+  const { data, error } = await sb.rpc("get_thread", { p_code: code, p_thread: threadId });
+  if (error || !Array.isArray(data)) return;
+  const box = document.getElementById("msgs");
+  if (!box) return;
+  box.innerHTML = "";
+  data.forEach((m) => {
+    const d = mk("div", "msg " + m.sender);
+    const who = m.sender === "wearer" ? (teeInfo.display_name || "Wearer") : "You";
+    d.appendChild(mk("span", "who", who + "  " + niceTime(m.created_at)));
+    d.appendChild(document.createTextNode(m.body));
+    box.appendChild(d);
+  });
+}
+
+const ERRORS = {
+  empty: "Write a message first.",
+  invalid: "Something went wrong. Refresh and try again.",
+  unavailable: "Messages are off right now.",
+  blocked: "This conversation has been closed.",
+  slow_down: "Easy - wait a few minutes before sending more.",
+  busy: "This shirt is getting lots of messages. Try again later.",
+};
+
+async function sendMessage() {
+  const err = document.getElementById("err"); err.textContent = "";
+  const body = document.getElementById("body"), nick = document.getElementById("nick"), btn = document.getElementById("send");
+  if (!body.value.trim()) { err.textContent = ERRORS.empty; return; }
+  btn.disabled = true;
+  const { data, error } = await sb.rpc("send_message", { p_code: code, p_thread: threadId, p_nickname: nick.value, p_body: body.value });
+  btn.disabled = false;
+  if (error || !data) { err.textContent = "Couldn't send. Check your connection and try again."; return; }
+  if (!data.ok) { err.textContent = ERRORS[data.error] || "Couldn't send."; return; }
+  try { localStorage.setItem("tt_nick", nick.value); } catch (e) {}
+  body.value = "";
+  loadThread();
+}
+
+function reportPage() {
+  const reason = window.prompt("What's wrong with this page? (optional)");
+  if (reason === null) return;
+  sb.rpc("report_tee", { p_code: code, p_reason: reason }).then(() => alert("Thanks - we'll take a look."));
+}
+
+init();
+</script>
+</body>
+</html>

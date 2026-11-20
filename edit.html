@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Your page - LET'S TALK</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/wearer.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/site-config.js"></script>
+<script src="js/tee-common.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="wrap"><a href="index.html" class="logo">LET'S <span>TALK</span></a></div></header>
+<main class="tt-wrap" id="app"><p class="tt-muted">Loading...</p></main>
+
+<script>
+const key = (new URLSearchParams(location.search).get("k") || "").trim();
+const app = document.getElementById("app");
+let tee = null;
+let openThread = null;
+
+function notice(title, sub) {
+  app.innerHTML = "";
+  const box = mk("div", "tt-center");
+  box.appendChild(mk("h1", "display", title));
+  if (sub) box.appendChild(mk("p", "tt-muted", sub));
+  const p = mk("p", "tt-small");
+  const a = mk("a", "", "Lost your link? Message us on WhatsApp");
+  a.href = "https://wa.me/" + STORE_WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Hi, I lost my Tee Talk edit link. My order number is: ");
+  p.appendChild(a); box.appendChild(p); app.appendChild(box);
+}
+
+async function init() {
+  if (!backendConfigured || !key) return notice("This link isn't valid.");
+  const { data, error } = await sb.rpc("get_tee_for_edit", { p_key: key });
+  if (error) return notice("Something went wrong.", "Please try again in a moment.");
+  if (!data) return notice("This edit link isn't valid.", "It may have been deleted.");
+  tee = data;
+  render();
+  refreshThreads();
+  setInterval(() => { if (document.visibilityState === "visible") refreshThreads(); }, 20000);
+}
+
+function checkbox(id, text, checked) {
+  const l = mk("label", "tt-check");
+  const i = mk("input"); i.type = "checkbox"; i.id = id; i.checked = checked;
+  l.append(i, mk("span", "", text));
+  return l;
+}
+function field(label, el) { const f = mk("div", "tt-field"); f.appendChild(mk("label", "lbl", label)); f.appendChild(el); return f; }
+
+function render() {
+  app.innerHTML = "";
+  app.appendChild(mk("h1", "display", "Your Tee Talk page"));
+  app.appendChild(mk("p", "tt-by", tee.slogan ? "Shirt: " + tee.slogan : ""));
+
+  const pill = !tee.live ? mk("span", "tt-pill wait", "Waiting to go live")
+    : tee.paused ? mk("span", "tt-pill off", "Paused") : mk("span", "tt-pill live", "Live");
+  const st = mk("p", "tt-small"); st.style.marginTop = "14px"; st.appendChild(pill);
+  app.appendChild(st);
+  if (!tee.live) app.appendChild(mk("p", "tt-small", "Your page goes live once we've confirmed your order. You can set everything up now."));
+
+  const link = mk("div", "tt-card");
+  link.appendChild(mk("p", "tt-muted", "Your scan page (what the QR on your shirt opens):"));
+  const row = mk("div", "copy-row");
+  const inp = mk("input"); inp.readOnly = true; inp.value = scanUrl(tee.scan_code);
+  const cp = mk("button", "btn small", "Copy"); cp.addEventListener("click", () => copyText(inp.value, cp));
+  row.append(inp, cp); link.appendChild(row);
+  const prev = mk("a", "tt-small", "Preview my page"); prev.href = scanUrl(tee.scan_code); prev.target = "_blank";
+  link.appendChild(prev);
+  app.appendChild(link);
+
+  const keep = mk("p", "tt-small", "Keep this edit link private. Anyone who has it can change your page. Bookmark it.");
+  app.appendChild(keep);
+
+  const form = mk("section", "tt-section");
+  form.appendChild(mk("h2", "display", "What people see"));
+  const name = mk("input", "tt-input"); name.id = "f-name"; name.maxLength = 40; name.value = tee.display_name;
+  const about = mk("textarea", "tt-textarea"); about.id = "f-about"; about.maxLength = 600; about.value = tee.about;
+  const prompt = mk("input", "tt-input"); prompt.id = "f-prompt"; prompt.maxLength = 160; prompt.value = tee.prompt;
+  prompt.placeholder = "Hi - I saw your shirt. What's the story?";
+  form.append(field("First name or nickname", name), field("About me", about),
+              field("The line you want strangers to say to you out loud", prompt));
+  form.appendChild(checkbox("f-visible", "Show my page when someone scans my shirt", !tee.paused));
+  form.appendChild(checkbox("f-chat", "Let people send me messages", tee.chat_enabled));
+  const save = mk("button", "btn", "Save changes");
+  const msg = mk("p", "tt-ok"); msg.id = "save-msg";
+  save.addEventListener("click", async () => {
+    save.disabled = true; msg.textContent = ""; msg.className = "tt-ok";
+    const { data, error } = await sb.rpc("update_tee", {
+      p_key: key, p_display_name: name.value, p_about: about.value, p_prompt: prompt.value,
+      p_chat_enabled: document.getElementById("f-chat").checked, p_paused: !document.getElementById("f-visible").checked,
+    });
+    save.disabled = false;
+    if (error || !data) { msg.className = "tt-err"; msg.textContent = "Couldn't save. Try again."; return; }
+    tee.paused = !document.getElementById("f-visible").checked;
+    msg.textContent = "Saved.";
+  });
+  form.append(save, msg);
+  app.appendChild(form);
+
+  const inbox = mk("section", "tt-section");
+  inbox.appendChild(mk("h2", "display", "Messages"));
+  const list = mk("div"); list.id = "threads";
+  inbox.appendChild(list);
+  app.appendChild(inbox);
+
+  const danger = mk("section", "tt-danger");
+  danger.appendChild(mk("h2", "display", "Delete my page"));
+  danger.appendChild(mk("p", "tt-muted", "Permanently removes your page and every message. The QR on your shirt will stop working. To just take a break, untick \"Show my page\" above instead."));
+  const del = mk("button", "btn danger small", "Delete everything");
+  del.addEventListener("click", async () => {
+    if (!confirm("Delete your page and all messages permanently? This can't be undone.")) return;
+    const { data } = await sb.rpc("delete_tee", { p_key: key });
+    if (data) notice("Your page has been deleted.", "Thanks for talking.");
+  });
+  danger.appendChild(del);
+  app.appendChild(danger);
+}
+
+async function refreshThreads() {
+  const list = document.getElementById("threads");
+  if (!list) return;
+  const { data, error } = await sb.rpc("list_threads", { p_key: key });
+  if (error || !Array.isArray(data)) return;
+  list.innerHTML = "";
+  if (data.length === 0) { list.appendChild(mk("p", "tt-muted", "No messages yet. When someone writes, it will appear here.")); return; }
+  for (const t of data) {
+    const card = mk("div", "tt-card");
+    const head = mk("div", "thread-head");
+    head.appendChild(mk("strong", "", t.nickname || "Someone"));
+    const right = mk("span", "tt-small");
+    if (t.blocked) right.appendChild(mk("span", "badge muted", "Blocked"));
+    else if (t.last_sender === "scanner") right.appendChild(mk("span", "badge", "Needs reply"));
+    right.appendChild(document.createTextNode("  " + niceTime(t.last_at)));
+    head.appendChild(right);
+    card.appendChild(head);
+    card.appendChild(mk("p", "tt-muted", t.last_body.length > 90 ? t.last_body.slice(0, 90) + "..." : t.last_body));
+    const detail = mk("div"); detail.id = "d-" + t.thread_id;
+    card.appendChild(detail);
+    head.addEventListener("click", () => { openThread = openThread === t.thread_id ? null : t.thread_id; refreshThreads(); });
+    list.appendChild(card);
+    if (openThread === t.thread_id) await showThread(t, detail);
+  }
+}
+
+async function showThread(t, detail) {
+  const { data } = await sb.rpc("get_thread_for_wearer", { p_key: key, p_thread: t.thread_id });
+  const box = mk("div", "msgs");
+  (data || []).forEach((m) => {
+    const d = mk("div", "msg " + (m.sender === "wearer" ? "scanner" : "wearer"));
+    d.appendChild(mk("span", "who", (m.sender === "wearer" ? "You" : (m.nickname || "Someone")) + "  " + niceTime(m.created_at)));
+    d.appendChild(document.createTextNode(m.body));
+    box.appendChild(d);
+  });
+  detail.appendChild(box);
+  const row = mk("div", "tt-row");
+  if (!t.blocked) {
+    const ta = mk("textarea", "tt-textarea"); ta.maxLength = 500; ta.placeholder = "Write a reply...";
+    ta.id = "reply-" + t.thread_id;
+    const old = window.__draft && window.__draft[t.thread_id]; if (old) ta.value = old;
+    ta.addEventListener("input", () => { window.__draft = window.__draft || {}; window.__draft[t.thread_id] = ta.value; });
+    detail.appendChild(ta);
+    const send = mk("button", "btn small", "Reply");
+    send.addEventListener("click", async () => {
+      if (!ta.value.trim()) return;
+      send.disabled = true;
+      const { data: ok } = await sb.rpc("reply_to_thread", { p_key: key, p_thread: t.thread_id, p_body: ta.value });
+      send.disabled = false;
+      if (ok) { ta.value = ""; if (window.__draft) window.__draft[t.thread_id] = ""; refreshThreads(); }
+    });
+    row.appendChild(send);
+    const blk = mk("button", "btn ghost small", "Block this person");
+    blk.addEventListener("click", async () => { if (confirm("Block this person? They won't be able to message you again.")) { await sb.rpc("block_thread", { p_key: key, p_thread: t.thread_id }); refreshThreads(); } });
+    row.appendChild(blk);
+  } else {
+    const ub = mk("button", "btn ghost small", "Unblock");
+    ub.addEventListener("click", async () => { await sb.rpc("unblock_thread", { p_key: key, p_thread: t.thread_id }); refreshThreads(); });
+    row.appendChild(ub);
+  }
+  detail.appendChild(row);
+}
+
+init();
+</script>
+</body>
+</html>
